@@ -23,6 +23,16 @@ using namespace std;
 struct Access_data{
     string user_name,user_pass,user_address,user_credit_num,user_credit_exp, user_credit_code;
 };
+struct Login_store{
+    string user_name,user_pass,user_address,user_credit_num,user_credit_exp, user_credit_code;
+};
+struct Products{
+    string name;
+    int price;
+};
+int to_add=0;
+int sports_products_size=5;
+Products *sports=new Products[sports_products_size];
 //------------------------Main Data function to just Print out Main Menu
 void Main_Menu_data();
 //----------------------Sign up data function to print signup menu details
@@ -33,10 +43,40 @@ void Customer_Sign_up(Access_data[],int); //----Customer will be able to sign up
 void Employee_Sign_up(Access_data[],int); //----Employee will be able to sign up through this function
 void Owner_Sign_up(Access_data[],int); //----Owner will be able to sign up through this function
 //----------------------login function to start login for corresponding 
-void Login();
-void Customer_login(); //-----------Customer will be able to login through this function
+void Login(Access_data[],Access_data[],int,int);
+//----sub login customer
+void Customer_login(Access_data[],int); //-----------Customer will be able to login through this function
+Login_store store={" "}; //-------for logins
+void customer_login_start(); //----------after successfull login display this
+void Buy_Products(); //---------customer only
+void Buy_Products_data(); //----------data will be used and can be Modified by customer and owner respectively
+void sports_products();
+void sports_products_data();
+void tools();
+void electronics_products();
+void Account_Details(); //-----------Account Details for Customer, Employee, Owner
+void Account_Details_data(); //--------just to display sub menus
+//----sub login employee
 void Employee_login();//----------Employees wil be able to login through this function
-void Owner_login();//-------------Owner will be able to login through this function
+//----sub login Owner
+void Owner_login(Access_data[],int);//-------------Owner will be able to login through this function
+void owner_login_start_data();//------just to print owner login data
+void employee_details_by_owner(Access_data[],int);
+void products_main();
+void products_data();
+void edit_products();
+void edit_products_data(); //------to display edit products menu
+void add_products();
+void add_products_data(); //--------sports tools electronics 
+void add_sports();
+void add_tools();
+void add_electronics();
+void add_products_menu();
+int add_values(int,int);
+void modify_products();
+void display_products(); //----------to display products
+void total_profit();
+void Account_Details_Owner();
 //--------------------Login data to be printed
 void Login_data();
 //----------------------Help function containing timings etc
@@ -81,7 +121,7 @@ int main(){
             choice_menu = tolower(choice_menu);
             switch(choice_menu){
                 case 's':Sign_up(customer_memory,employee_memory,owner_memory,size_customer_data,size_employee_data,size_owner_data);break;
-                case 'l':Login();break;
+                case 'l':Login(customer_memory,owner_memory,size_customer_data,size_owner_data);break;
                 case 'h':Help();break;
                 case 'a':About_data();break;
                 case 'e':running=false;break;
@@ -92,6 +132,7 @@ int main(){
             }
         }while(check==1);
     }while(running);
+    return 0;
 }
 /*
     ------------------------------------------------------
@@ -233,6 +274,64 @@ void Login_data(){
     cout<<"\033[01m\033[32m[E]\033[0m Employee Login\n";
     cout<<"\033[01m\033[32m[O]\033[0m Owner Login\n";
     cout<<"\033[01m\033[32m[B]\033[0m Go Back\n";
+}
+void customer_login_start(){
+    system("cls");
+    cout<<"\033[1m\033[31mWelcome @"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
+    cout<<"\n\033[01m\033[32m[P]\033[0m Buy Products\n";
+    cout<<"\033[01m\033[32m[D]\033[0m Account Details\n";
+    cout<<"\033[01m\033[32m[A]\033[0m About Us\n";
+    cout<<"\033[01m\033[32m[L]\033[0m Logout\n";
+    cout<<"\033[01m\033[32m[E]\033[0m Exit\n";
+}
+void owner_login_start_data(){
+    system("cls");
+    cout<<"\033[1m\033[31mWelcome @"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
+    cout<<"\n\033[01m\033[32m[D]\033[0m Employees Details\n";
+    cout<<"\033[01m\033[32m[P]\033[0m Products\n";
+    cout<<"\033[01m\033[32m[T]\033[0m Total Profit\n";
+    cout<<"\033[01m\033[32m[A]\033[0m Account Details\n";
+    cout<<"\033[01m\033[32m[U]\033[0m About Us\n";
+    cout<<"\033[01m\033[32m[L]\033[0m Logout\n";
+    cout<<"\033[01m\033[32m[E]\033[0m Exit\n";
+}
+void Buy_Products_data(){
+    system("cls");
+    cout<<"\033[1m\033[31m@"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
+    cout<<"\n\033[01m\033[32m[S]\033[0m Sports Products\n";
+    cout<<"\033[01m\033[32m[T]\033[0m Tools\n";
+    cout<<"\033[01m\033[32m[E]\033[0m Electronics Products\n";
+    cout<<"\033[01m\033[32m[B]\033[0m Go Back\n";
+}
+void sports_products_data(){
+    system("cls");
+    cout<<"\033[1m\033[31m@"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
+    
+}
+void products_data(){
+    system("cls");
+    cout<<"\033[1m\033[31m@"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
+    cout<<"\033[01m\033[32m[E]\033[0m Edit Products\n";
+    cout<<"\033[01m\033[32m[D]\033[0m Display Products\n";
+    cout<<"\033[01m\033[32m[B]\033[0m Go Back\n";
+}
+void edit_products_data(){
+    system("cls");
+    cout<<"\033[1m\033[31m@"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
+    cout<<"\033[01m\033[32m[A]\033[0m Add Products\n";
+    cout<<"\033[01m\033[32m[M]\033[0m Modify Products\n";
+    cout<<"\033[01m\033[32m[B]\033[0m Go Back\n";
+}
+void add_products_menu(){
+    system("cls");
+    cout<<"\033[1m\033[31m@"<<store.user_name<<"\033[0m\n";
+    cout<<"-------------------\n";
 }
 /*
     -----------------------------------------------------------------
@@ -549,7 +648,7 @@ void Owner_Sign_up(Access_data memory[],int size){
    --------------------------- Login Function------------------------
     -----------------------------------------------------------------
 */
-void Login(){
+void Login(Access_data customer_memory[],Access_data owner_memory[],int size_customer_data,int size_owner_data){
     bool login_running=true;
     do{
         int login_check=0;
@@ -561,9 +660,9 @@ void Login(){
             cin>>login_choice;
             login_choice = tolower(login_choice);
             switch(login_choice){
-                case 'c':Customer_login();break;
+                case 'c':Customer_login(customer_memory,size_customer_data);break;
                 case 'e':Employee_login();break;
-                case 'o':Owner_login();break;
+                case 'o':Owner_login(owner_memory,size_owner_data);break;
                 case 'b':login_running=false;break;
                 default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
                         cout<<"Press Enter to try again ";
@@ -572,6 +671,270 @@ void Login(){
             }
         }while(login_check==1);
     }while(login_running);
+}
+/*
+    ---------------------------------------------------
+   ---------------------- Sub function -----------------
+---------------------for Customer login ------------------
+    -----------------------------------------------------
+*/
+void Customer_login(Access_data memory[],int size){
+    system("cls");
+    customer_data_to_memory(memory);
+    bool login_check;
+    bool login_start=false;
+    bool login_running=true;
+    if(customer_data_loading_check==0){
+        do{
+            do{
+                cin.ignore();
+                login_check=true;
+                string username,password;
+                cout<<"Enter Username: ";
+                cin.ignore();
+                getline(cin,username);
+                cout<<"Enter Password: ";
+                getline(cin,password);
+                int i=0;
+                while(i<=size){
+                    if(username==memory[i].user_name&&password==memory[i].user_pass){
+                        login_check=false;
+                        store.user_name=memory[i].user_name;
+                        store.user_pass=memory[i].user_pass;
+                        store.user_address=memory[i].user_address;
+                        store.user_credit_num=memory[i].user_credit_num;
+                        store.user_credit_code=memory[i].user_credit_code;
+                        store.user_credit_exp=memory[i].user_credit_exp;
+                        login_start=true;
+                        login_running=false;
+                    }
+                    i++;
+                }
+                if(login_check==true){
+                    cout<<"\033[31mError!!\033[0m Your Username or Password is incorrect\n";
+                    cout<<"Press [B] to go back or [Any other key] to try again: ";
+                    char choice;
+                    cin>>choice;
+                    choice=tolower(choice);
+                    if(choice=='b'){
+                        login_running=false;
+                        login_check=false;
+                    }
+                    else{
+                        login_check=true;
+                    }
+                }
+            }while(login_check!=false);
+        }while(login_running);
+    }
+    if(login_start==true){
+        bool login_start_running=true;
+        do{
+            customer_login_start();
+            bool login_start_check=true;
+            do{
+                cout<<"\nChoose your option: ";
+                char login_start_choice;
+                cin>>login_start_choice;
+                login_start_choice = tolower(login_start_choice);
+                switch(login_start_choice){
+                    case 'p':Buy_Products();break;
+                    case 'd':Account_Details();break;
+                    case 'a':About_data();break;
+                    case 'l':login_start_running=false;break;
+                    case 'e':exit(0);break;
+                    default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
+                            cout<<"Press Enter to try again ";
+                            getch();
+                            login_start_check=false;
+                }
+            }while(login_start_check==false);
+        }while(login_start_running);
+    }
+}
+//----- customer_login\login\buyproducts
+void Buy_Products(){
+    bool buy_products_running=true;
+    do{
+        Buy_Products_data();
+        bool buy_products_check=true;
+        do{
+            cout<<"\nChoose your option: ";
+            char buy_products_choice;
+            cin>>buy_products_choice;
+            buy_products_choice = tolower(buy_products_choice);
+            switch(buy_products_choice){
+                case 's':sports_products();break;
+                case 't':tools();break;
+                case 'e':electronics_products();break;
+                case 'b':buy_products_running=false;break;
+                default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
+                        cout<<"Press Enter to try again ";
+                        getch();
+                        buy_products_check=false;
+            }
+        }while(buy_products_check==false);
+    }while(buy_products_running);
+}
+void sports_products(){}
+void tools(){}
+void electronics_products(){}
+void Account_Details(){}
+void Employee_login(){}
+/*
+    ---------------------------------------------------
+   ---------------------- Sub function -----------------
+---------------------for owner login ------------------
+    -----------------------------------------------------
+*/
+void Owner_login(Access_data memory[],int size){
+    owner_data_to_memory(memory);
+    bool owner_login_running=true;
+    bool owner_login_check;
+    bool owner_login_start=false;
+    do{
+        do{
+                owner_login_check=true;
+            string username,password;
+            cout<<"Enter Username: ";
+            getline(cin,username);
+            cout<<"Enter Password: ";
+            getline(cin,password);
+            int i=0;
+            while(i<=size){
+                if(username==memory[i].user_name&&password==memory[i].user_pass){
+                    owner_login_check=false;
+                    store.user_name=memory[i].user_name;
+                    store.user_pass=memory[i].user_pass;
+                    store.user_address=memory[i].user_address;
+                    store.user_credit_num=memory[i].user_credit_num;
+                    store.user_credit_code=memory[i].user_credit_code;
+                    store.user_credit_exp=memory[i].user_credit_exp;
+                    owner_login_start=true;
+                    owner_login_running=false;
+                }
+                i++;
+            }
+            if(owner_login_check==true){
+                cout<<"\033[31mError!!\033[0m Your Username or Password is incorrect\n";
+                cout<<"Press [B] to go back or [Any other key] to try again: ";
+                char choice;
+                cin>>choice;
+                choice=tolower(choice);
+                if(choice=='b'){
+                    owner_login_running=false;
+                    owner_login_check=false;
+                }
+                else{
+                    owner_login_check=true;
+                }
+            }
+        }while(owner_login_check!=false);
+    }while(owner_login_running);
+    if(owner_login_start){ 
+        bool owner_login_start_running=true;
+        do{
+            owner_login_start_data();
+            bool owner_login_start_check=true;
+            do{
+                cout<<"\nChoose your option: ";
+                char owner_login_choice;
+                cin>>owner_login_choice;
+                owner_login_choice = tolower(owner_login_choice);
+                switch(owner_login_choice){
+                    case 'd':employee_details_by_owner(memory,size);break;
+                    case 'p':products_main();break;
+                    case 't':total_profit();break;
+                    case 'a':Account_Details_Owner();break;
+                    case 'u':About_data();break;
+                    case 'l':owner_login_start_running=false;break;
+                    case 'e':exit(0);break;
+                    default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
+                            cout<<"Press Enter to try again ";
+                            getch();
+                            owner_login_start_check=false;
+                }
+            }while(owner_login_start_check==false);
+        }while(owner_login_start_running);
+    }
+}
+void employee_details_by_owner(Access_data memory[],int size){
+    employee_data_to_memory(memory);
+    if(employee_data_loading_check!=1){
+
+    }
+}
+void products_main(){
+    bool products_main_running=true;
+    do{
+        bool products_check=true;
+        do{
+            products_data();
+            cout<<"\nChoose your option: ";
+            char products_choice;
+            cin>>products_choice;
+            products_choice=tolower(products_choice);
+            switch(products_choice){
+                case 'e':edit_products();break;
+                case 'd':display_products();break;
+                case 'b':products_main_running=false;break;
+                default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
+                        cout<<"Press Enter to try again ";
+                        getch();
+                        products_check=false;
+            }
+        }while(products_check==false);
+    }while(products_main_running);
+}
+void edit_products(){
+    bool edit_products_running=true;
+    do{
+        bool edit_products_check=true;
+        do{
+            edit_products_data();
+            cout<<"\nChoose your option: ";
+            char edit_products_choice;
+            cin>>edit_products_choice;
+            edit_products_choice=tolower(edit_products_choice);
+            switch(edit_products_choice){
+                case 'a':add_products();break;
+                case 'm':modify_products();break;
+                case 'b':edit_products_running=false;break;
+                default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
+                        cout<<"Press Enter to try again ";
+                        getch();
+                        edit_products_check=false;
+            }
+        }while(edit_products_check==false);
+    }while(edit_products_running);
+}
+void add_products(){
+    bool add_products_running=true;
+    do{
+        bool add_products_check=true;
+        do{
+            Buy_Products_data(); //--------due to same function of a function instead add it is buy
+            cout<<"\nChoose your option: ";
+            char add_products_choice;
+            cin>>add_products_choice;
+            add_products_choice=tolower(add_products_choice);
+            switch(add_products_choice){
+                case 's':add_sports();break;
+                case 't':add_tools();break;
+                case 'e':add_electronics();break;
+                case 'b':add_products_running=false;break;
+                default:cout<<"\033[31mError!!\033[0m You entered invalid choice\n";
+                        cout<<"Press Enter to try again ";
+                        getch();
+                        add_products_check=false;
+            }
+        }while(add_products_check==false);
+    }while(add_products_running);
+}
+void add_sports(){
+    cout<<"\nHow many \033[01m\033[34mProducts\033[0m you want to add: ";
+    cin>>to_add;
+    add_values(to_add,sports_products_size);
 }
 /*
     -----------------------------------------------------------------
@@ -680,3 +1043,13 @@ void owner_data_to_memory(Access_data memory[]){
         int owner_data_loading_check=1;
     }
 }
+///------just for now
+int add_values(int items,int pre){
+    pre=pre+items;
+}
+
+/*add_products_menu();
+    cout<<"\nHow many \033[01m\033[34mProducts\033[0m you want to add: ";
+    cin>>to_add;
+    add_values(to_add,sports_products_size);
+*/
