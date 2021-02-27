@@ -53,13 +53,14 @@ struct attendance_data{
 struct order_profit{
     string name;
     string cd_num;
-    int profit;
+    string profit;
+    string source;
 };
 struct salary{
     string name;
     string cd_num;
     string address;
-    int salary;
+    string salary;
     string timeing;
 };
 int index_login;
@@ -159,7 +160,6 @@ void products_data_to_memory(int[]);
 void accounts_data_to_memory(int[]);
 void order_data_to_memory(order_profit[]);
 void salary_data_to_memory(salary[]);
-int global_product_checker;
 //-----------functions to load storage data for modification and purchasing
 void load_sports_data(Products_data_access[]);
 void load_tools_data(Products_data_access[]);
@@ -2775,12 +2775,24 @@ void total_profit(){
     order_data_to_memory(customer_order);
     salary_data_to_memory(employee_salary);
     int sum_order=0;
+    int *order_data=new int[size_storage[6]];
     for(int index=0;index<size_storage[6];index++){
-        sum_order+=customer_order[index].profit;
+        if(customer_order[index].profit!=""){
+            stringstream convert_profit(customer_order[index].profit);
+            convert_profit>>order_data[index];
+        }
+    }
+    for(int index=0;index<size_storage[6]-1;index++){
+        sum_order+=order_data[index];
     }
     int sum_salary=0;
+    int *salary_data=new int[size_storage[7]];
     for(int index=0;index<size_storage[7];index++){
-        sum_salary+=employee_salary[index].salary;
+        stringstream convert_salary(employee_salary[index].salary);
+        convert_salary>>salary_data[index];
+    }
+    for(int index=0;index<size_storage[7]-1;index++){
+        sum_salary+=salary_data[index];
     }
     cout<<"Total Sales Profit: \033[31m"<<sum_order<<"\033[0m RS.\n";
     cout<<"Total Salary of Employees(Withdrawn): \033[31m"<<sum_salary<<"\033[0m RS.\n";
@@ -2992,13 +3004,16 @@ void owner_data_to_memory(Access_data memory[]){
     }
 }
 void order_data_to_memory(order_profit memory[]){
-    ifstream order_data("Order_placed.log");
+    products_data_to_memory(size_storage);
+    ifstream order_data;
+    order_data.open("Order_placed.log");
     if(order_data.is_open()){
         int index=0;
         while(!order_data.eof()){
             getline(order_data,memory[index].name);
             getline(order_data,memory[index].cd_num);
-            order_data>>memory[index].profit;
+            getline(order_data,memory[index].profit);
+            getline(order_data,memory[index].source);
             index++;
         }
         order_data.close();
@@ -3011,6 +3026,7 @@ void order_data_to_memory(order_profit memory[]){
     }
 }
 void salary_data_to_memory(salary memory[]){
+    products_data_to_memory(size_storage);
     ifstream salary_data("salary.log");
     if(salary_data.is_open()){
         int index=0;
@@ -3018,7 +3034,7 @@ void salary_data_to_memory(salary memory[]){
             getline(salary_data,memory[index].name);
             getline(salary_data,memory[index].cd_num);
             getline(salary_data,memory[index].address);
-            salary_data>>memory[index].salary;
+            getline(salary_data,memory[index].salary);
             getline(salary_data,memory[index].timeing);
             index++;
         }
@@ -3034,7 +3050,6 @@ void salary_data_to_memory(salary memory[]){
 //-----------log file loading
 void products_data_to_memory(int memory[]){
     ifstream products_quantity;
-    int temp;
     products_quantity.open("Products_log.db");
     if(products_quantity.is_open()){
         while(!products_quantity.eof()){
