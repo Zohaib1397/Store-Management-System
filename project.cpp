@@ -92,6 +92,9 @@ void simple_Products_data(); //--------for employee and owner
 void Display_sports();
 void Display_tools();
 void Display_electronics();
+void Display_customer_sports();
+void Display_customer_tools();
+void Display_customer_electronics();
 void sports_products();
 void tools();
 void cart_products();
@@ -331,7 +334,7 @@ void timing_data(){
     cout<<"\033[1m\033[31mTimings\033[0m\n";
     cout<<"-------------------\n";
     time_t now =time(0);
-	char* day_find = ctime(&now);
+	string day_find = ctime(&now);
 	cout<<"\033[01m\033[32mCurrent-Time\033[0m = "<<day_find<<"\n";
 	if(day_find[0]=='M'){
 		if(day_find[1]=='o'){
@@ -396,14 +399,14 @@ void timing_data(){
     if(day_find[0]=='S'){
 		if(day_find[1]=='u'){
 			if(day_find[2]=='n'){
-				cout<<"\033[1m\033[31mSunday\033[0m Close\n";
+				cout<<"\033[1m\033[31mSunday\033[0m Closed\n";
 			}
 		}
 	}
 	else{
 		cout<<"\033[1m\033[34mSunday\033[0m Close\n";
 	}
-    cout<<"Press Enter to Go Back: ";
+    cout<<"\nPress Enter to Go Back: ";
     getch();
 }
 void contact_data(){
@@ -429,7 +432,7 @@ void customer_login_start(){
     system("cls");
     cout<<"\033[1m\033[31mWelcome @"<<store.user_name<<"\033[0m\n";
     cout<<"-------------------\n";
-    cout<<"\n\033[01m\033[32m[P]\033[0m Buy Products\n";
+    cout<<"\n\033[01m\033[32m[B]\033[0m Buy Products\n";
     cout<<"\033[01m\033[32m[D]\033[0m Account Details\n";
     cout<<"\033[01m\033[32m[A]\033[0m About Us\n";
     cout<<"\033[01m\033[32m[L]\033[0m Logout\n";
@@ -966,7 +969,7 @@ void Customer_login(Access_data memory[],int size){
                 cin>>login_start_choice;
                 login_start_choice = tolower(login_start_choice);
                 switch(login_start_choice){
-                    case 'p':Buy_Products();break;
+                    case 'b':Buy_Products();break;
                     case 'd':Account_Details();break;
                     case 'a':About_data();break;
                     case 'l':login_start_running=false;cart_counter=0;total_bill=0;bill_purchase_price=0;profit=0;break;
@@ -1021,7 +1024,7 @@ void sports_products(){
                 do{
                     purchase_sports_check=true;
                     system("cls");
-                    Display_sports();
+                    Display_customer_sports();
                     Products_data_access *data=new Products_data_access[size_storage[1]+5];
                     cout<<"\nChoose the Desired Number or Press \033[31m[B]\033[0m to go back: ";
                     char a_value;
@@ -1120,7 +1123,7 @@ void tools(){
                 do{
                     purchase_Tools_check=true;
                     system("cls");
-                    Display_tools();
+                    Display_customer_tools();
                     Products_data_access *data=new Products_data_access[size_storage[2]+5];
                     cout<<"\nChoose the Desired Number or Press \033[31m[B]\033[0m to go back: ";
                     char a_value;
@@ -1219,7 +1222,7 @@ void electronics_products(){
                 do{
                     purchase_Electronics_check=true;
                     system("cls");
-                    Display_electronics();
+                    Display_customer_electronics();
                     Products_data_access *data=new Products_data_access[size_storage[3]+5];
                     cout<<"\nChoose the Desired Number or Press \033[31m[B]\033[0m to go back: ";
                     char a_value;
@@ -1471,13 +1474,13 @@ void credit_card_payment(){
 void print_receipt(){
     system("cls");
     cout<<setw(50)<<"\033[31m@"<<store.user_name<<"\033[0m\n";
-    cout<<"---------------------------------------------------------------------------------------------\n";
+    cout<<"-------------------------------------------------------------------------------------------------------------\n";
     cout<<"\033[01m\033[36mProducts\t\t\t\t   "<<left<<setw(60)<<"Quantity"<<setw(2)<<"Price\n\033[0m"<<right<<setw(20)<<"\n";
     for(int i=0;i<cart_counter;i++){
         cout<<left<<setw(25)<<store_data[i].name<<"\t\t\t"<<left<<setw(25)<<store_data[i].quantity<<setw(30)<<store_data[i].sale_price<<right<<"\n";
     }
-    cout<<"---------------------------------------------------------------------------------------------\n";
-    cout<<"\033[32mTotal bill\033[0m:"<<setw(67)<<total_bill<<"\n";
+    cout<<"-------------------------------------------------------------------------------------------------------------\n";
+    cout<<"\033[32mTotal bill\033[0m:"<<setw(75)<<total_bill<<"\n";
     time_t now =time(0);
 	char* day_find = ctime(&now);
 	cout<<"\033[01m\033[31mTime\033[0m = "<<day_find<<"\n";
@@ -3240,6 +3243,81 @@ void Display_electronics(){
             getline(display_data,temp_pp);
             getline(display_data,temp_sp);
             cout<<i+1<<"\t\t"<<setw(25)<<left<<temp_name<<setw(25)<<temp_pp<<setw(25)<<temp_sp<<right<<"\n";
+        }
+        display_data.close();
+    }
+    else{
+        cout<<"\033[31mError!!\033[0m Unable to Load the \033[31mElectronics_data.db\033[0m \n";
+        cout<<"Press Enter to \033[36mTry again\033[0m";
+        getch();
+        cout<<"\n";
+    }
+}
+void Display_customer_sports(){
+    ifstream display_data("Sports_data.db");
+    if(display_data.is_open()){
+        string temp_name;
+        string temp_pp;
+        string temp_sp;
+        products_data_to_memory(size_storage);
+        cout<<setw(50)<<"\033[01m\033[32mSports Products\033[0m\n";
+        cout<<"\033[01m\033[33m-------------------------------------------------------\033[0m\n";
+        cout<<"\033[01m\033[36mNo.\t\tName"<<setw(25)<<"\t\t Price"<<setw(25)<<"\033[0m\n";
+        for(int i=0;i<size_storage[1];i++){
+            getline(display_data,temp_name);
+            getline(display_data,temp_pp);
+            getline(display_data,temp_sp);
+            cout<<i+1<<"\t\t"<<setw(25)<<left<<temp_name<<"\t "<<setw(25)<<temp_sp<<"\n";
+        }
+        display_data.close();
+    }
+    else{
+        cout<<"\033[31mError!!\033[0m Unable to Load the \033[31mSports_data.db\033[0m \n";
+        cout<<"Press Enter to \033[36mTry again\033[0m";
+        getch();
+        cout<<"\n";
+    }
+}
+void Display_customer_tools(){
+    ifstream display_data("Tools_data.db");
+    if(display_data.is_open()){
+        string temp_name;
+        string temp_pp;
+        string temp_sp;
+        products_data_to_memory(size_storage);
+        cout<<setw(50)<<"\033[01m\033[32mTools Products\033[0m\n";
+        cout<<"\033[01m\033[33m-------------------------------------------------------\033[0m\n";
+        cout<<"\033[01m\033[36mNo.\t\tName"<<setw(25)<<"\t\t Price"<<setw(25)<<"\033[0m\n";
+        for(int i=0;i<size_storage[2];i++){
+            getline(display_data,temp_name);
+            getline(display_data,temp_pp);
+            getline(display_data,temp_sp);
+            cout<<i+1<<"\t\t"<<setw(25)<<left<<temp_name<<"\t "<<setw(25)<<temp_sp<<"\n";
+        }
+        display_data.close();
+    }
+    else{
+        cout<<"\033[31mError!!\033[0m Unable to Load the \033[31mTools_data.db\033[0m \n";
+        cout<<"Press Enter to \033[36mTry again\033[0m";
+        getch();
+        cout<<"\n";
+    }
+}
+void Display_customer_electronics(){
+    ifstream display_data("Electronics_data.db");
+    if(display_data.is_open()){
+        string temp_name;
+        string temp_pp;
+        string temp_sp;
+        products_data_to_memory(size_storage);
+        cout<<setw(50)<<"\033[01m\033[32mElectronics Products\033[0m\n";
+        cout<<"\033[01m\033[33m-------------------------------------------------------\033[0m\n";
+        cout<<"\033[01m\033[36mNo.\t\tName"<<setw(25)<<"\t\t Price"<<setw(25)<<"\033[0m\n";
+        for(int i=0;i<size_storage[3];i++){
+            getline(display_data,temp_name);
+            getline(display_data,temp_pp);
+            getline(display_data,temp_sp);
+            cout<<i+1<<"\t\t"<<setw(25)<<left<<temp_name<<"\t "<<setw(25)<<temp_sp<<"\n";
         }
         display_data.close();
     }
