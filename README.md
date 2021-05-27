@@ -1,4 +1,5 @@
 # Store-Management-System
+//Just a Procedural Programming method (no OOP concept involved)
 ©This Program is Copyrighted and Owned by Zohaib Ahmed
 Terms & Conditions:
     This program is designed to manage store data. The main features of this program is to Sign Up customers,
